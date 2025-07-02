@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋游戏</title>
+</head>
+<body>
+    <div id="app">
+        <h1>五子棋游戏</h1>
+        <div id="menu">
+            <button id="startPvP">双人对战</button>
+            <button id="startPvAI">单人对战</button>
+            <button id="saveGame">保存游戏</button>
+            <button id="loadGame">载入游戏</button>
+            <button id="restartGame">重新开始</button>
+        </div>
+        <canvas id="chessboard"></canvas>
+        <div id="status">当前轮次：黑棋</div>
+    </div>
+</body>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+h1 {
+    color: #333;
+}
+
+#menu {
+    margin-bottom: 20px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#chessboard {
+    display: block;
+    margin: 0 auto;
+    background-color: #e0cda9;
+    border: 2px solid #333;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+</style>
+<script>
+    // 获取HTML元素
+const canvas = document.getElementById('chessboard');
+const statusDiv = document.getElementById('status');
+const startPvPButton = document.getElementById('startPvP');
+const startPvAIButton = document.getElementById('startPvAI');
+const saveGameButton = document.getElementById('saveGame');
+const loadGameButton = document.getElementById('loadGame');
+const restartGameButton = document.getElementById('restartGame');
+
+// 设置棋盘大小和格子数
+const boardSize = 15;
+const cellSize = 40;
+canvas.width = boardSize * cellSize;
+canvas.height = boardSize * cellSize;
+const ctx = canvas.getContext('2d');
+
+// 初始化游戏状态
+let board = Array.from({ length: boardSize }, () => Array(boardSize).fill(null));
+let currentPlayer = 'black'; // 当前玩家，黑棋先手
+let gameMode = 'PvP'; // 游戏模式，默认双人对战
+let gameOver = false;
+let history = []; // 悔棋记录
+
+// 绘制棋盘
+function drawBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+            ctx.strokeStyle = '#333';
+            ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+        }
+    }
+    drawPieces();
+}
+
+// 绘制棋子
+function drawPieces() {
+    for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+            if (board[i][j] === 'black') {
+                ctx.beginPath();
+                ctx.arc(i * cellSize + cellSize / 2, j * cellSize + cellSize / 2, cellSize / 2 - 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'black';
+                ctx.fill();
+                ctx.closePath();
+            } else if (board[i][j] === 'white') {
+                ctx.beginPath();
+                ctx.arc(i * cellSize + cellSize / 2, j * cellSize + cellSize / 2, cellSize / 2 - 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+    }
+}
+
+// 棋盘点击事件
+canvas.addEventListener('click', (e) => {
+    if (gameOver) return;
+
+    const x = Math.floor(e.offsetX / cellSize);
+    const y = Math.floor(e.offsetY / cellSize);
+
+    if (board[x][y] === null) {
+        board[x][y] = currentPlayer;
+        history.push({ x, y, player: currentPlayer });
+        drawBoard();
+
+        if (checkWin(x, y, currentPlayer)) {
+            gameOver = true;
+            alert(`${currentPlayer === 'black' ? '黑棋' : '白棋'}获胜！`);
+            return;
+        }
+
+        currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+        statusDiv.textContent = `当前轮次：${currentPlayer === 'black' ? '黑棋' : '白棋'}`;
+    }
+});
+
+// 检查胜负
+function checkWin(x, y, player) {
+    const directions = [
+        { dx: 1, dy: 0 }, // 横向
+        { dx: 0, dy: 1 }, // 纵向
+        { dx: 1, dy: 1 }, // 斜向（右下）
+        { dx: 1, dy: -1 } // 斜向（右上）
+    ];
+
+    for (const { dx, dy } of directions) {
+        let count = 1;
+
+        for (let step = 1; step < 5; step++) {
+            const nx = x + dx * step;
+            const ny = y + dy * step;
+            if (nx >= 0 && ny >= 0 && nx < boardSize && ny < boardSize && board[nx][ny] === player) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        for (let step = 1; step < 5; step++) {
+            const nx = x - dx * step;
+            const ny = y - dy * step;
+            if (nx >= 0 && ny >= 0 && nx < boardSize && ny < boardSize && board[nx][ny] === player) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        if (count >= 5) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// 保存游戏
+saveGameButton.addEventListener('click', () => {
+    const saveData = {
+        board,
+        currentPlayer,
+        gameMode,
+        history
+    };
+    localStorage.setItem('gomokuSave', JSON.stringify(saveData));
+    alert('游戏已保存！');
+});
+
+// 载入游戏
+loadGameButton.addEventListener('click', () => {
+    const saveData = JSON.parse(localStorage.getItem('gomokuSave'));
+    if (saveData) {
+        board = saveData.board;
+        currentPlayer = saveData.currentPlayer;
+        gameMode = saveData.gameMode;
+        history = saveData.history;
+        gameOver = false;
+        drawBoard();
+        statusDiv.textContent = `当前轮次：${currentPlayer === 'black' ? '黑棋' : '白棋'}`;
+        alert('游戏已载入！');
+    } else {
+        alert('没有保存的游戏！');
+    }
+});
+
+// 重新开始游戏
+restartGameButton.addEventListener('click', () => {
+    board = Array.from({ length: boardSize }, () => Array(boardSize).fill(null));
+    currentPlayer = 'black';
+    gameOver = false;
+    history = [];
+    drawBoard();
+    statusDiv.textContent = '当前轮次：黑棋';
+});
+
+// 初始化棋盘
+drawBoard();
+</script>
+</html>

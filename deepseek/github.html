@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub: Where the world builds software · GitHub</title>
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        /* CSS Reset and Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.6;
+            color: #c9d1d9; /* GitHub's typical dark mode text color */
+            background-color: #0d1117; /* GitHub's typical dark mode background */
+        }
+
+        a {
+            color: #58a6ff; /* GitHub's typical link color */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #161b22; /* Darker header background */
+            padding: 16px 0;
+            border-bottom: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 28px;
+            font-weight: 600;
+            color: #f0f6fc;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 32px;
+            margin-right: 8px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-left: 24px;
+        }
+
+        nav ul li a {
+            color: #f0f6fc;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s ease;
+        }
+
+        nav ul li a:hover {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .search-box input {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #c9d1d9;
+            width: 180px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box input::placeholder {
+            color: #8b949e;
+        }
+
+        .search-box input:focus {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25);
+        }
+
+        .btn {
+            background-color: #238636; /* GitHub green button */
+            color: #f0f6fc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .btn:hover {
+            background-color: #2ea043;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #30363d;
+            color: #58a6ff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(88, 166, 255, 0.1);
+            border-color: #58a6ff;
+            text-decoration: none;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            min-height: 70vh;
+            background-image: radial-gradient(at 50% 0%, rgba(88, 166, 255, 0.1), transparent 70%);
+        }
+
+        .hero-section h1 {
+            font-size: 64px;
+            font-weight: 700;
+            color: #f0f6fc;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: #8b949e;
+            margin-bottom: 40px;
+            max-width: 700px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+            background-color: #0d1117;
+            border-top: 1px solid #30363d;
+        }
+
+        .features-section h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #f0f6fc;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+        }
+
+        .feature-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            color: #f0f6fc;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: #8b949e;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #161b22;
+            padding: 40px 0;
+            border-top: 1px solid #30363d;
+            font-size: 14px;
+            color: #8b949e;
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 180px;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-size: 16px;
+            color: #f0f6fc;
+            margin-bottom: 15px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #8b949e;
+            transition: color 0.2s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #f0f6fc;
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-bottom .logo {
+            margin-right: 20px;
+        }
+
+        .footer-bottom .logo a {
+            font-size: 20px;
+            color: #8b949e;
+        }
+
+        .social-links a {
+            color: #8b949e;
+            font-size: 20px;
+            margin-left: 15px;
+            transition: color 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: #f0f6fc;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header .container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav {
+                margin-top: 15px;
+                width: 100%;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 10px 10px 10px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .search-box {
+                margin-right: 10px;
+            }
+
+            .hero-section h1 {
+                font-size: 40px;
+            }
+
+            .hero-section p {
+                font-size: 18px;
+            }
+
+            .features-section h2 {
+                font-size: 36px;
+            }
+
+            .footer-column {
+                flex-basis: 45%;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-bottom .logo {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 32px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .footer-column {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="#" aria-label="GitHub homepage">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Octocat">
+                    GitHub
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">产品</a></li>
+                    <li><a href="#">解决方案</a></li>
+                    <li><a href="#">开源</a></li>
+                    <li><a href="#">定价</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="搜索 GitHub">
+                </div>
+                <a href="#" class="btn-outline">登录</a>
+                <a href="#" class="btn">注册</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <h1>Where the world builds software</h1>
+                <p>数百万开发者和团队使用 GitHub 来构建、发布和维护他们的软件。加入全球最大的开发者社区。</p>
+                <div class="hero-actions">
+                    <a href="#" class="btn">注册 GitHub</a>
+                    <a href="#" class="btn-outline">了解企业版</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <h2>全方位的开发者平台</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=C" alt="Collaboration Icon">
+                        <h3>协作开发</h3>
+                        <p>通过强大的协作工具，团队能够无缝地共同工作，跟踪更改，并管理项目生命周期。</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=A" alt="Automation Icon">
+                        <h3>自动化工作流</h3>
+                        <p>使用 GitHub Actions 自动化您的CI/CD管道，并集成您最喜欢的工具，提高效率。</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=S" alt="Security Icon">
+                        <h3>端到端安全</h3>
+                        <p>从代码到云端，GitHub提供内置的安全功能，帮助您发现并修复漏洞。</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=O" alt="Open Source Icon">
+                        <h3>开源管理</h3>
+                        <p>托管、发现和贡献于数百万个开源项目，塑造技术的未来。</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=H" alt="Hosting Icon">
+                        <h3>代码托管</h3>
+                        <p>安全可靠的代码仓库，支持Git版本控制，无论项目大小。</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="https://via.placeholder.com/80/58a6ff/ffffff?text=C" alt="Community Icon">
+                        <h3>活跃社区</h3>
+                        <p>与全球开发者连接，分享知识，解决问题，共同成长。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-column">
+                <h4>产品</h4>
+                <ul>
+                    <li><a href="#">特性</a></li>
+                    <li><a href="#">企业版</a></li>
+                    <li><a href="#">探索</a></li>
+                    <li><a href="#">市场</a></li>
+                    <li><a href="#">定价</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>平台</h4>
+                <ul>
+                    <li><a href="#">开发者API</a></li>
+                    <li><a href="#">合作伙伴</a></li>
+                    <li><a href="#">GitHub Desktop</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>支持</h4>
+                <ul>
+                    <li><a href="#">帮助</a></li>
+                    <li><a href="#">社区论坛</a></li>
+                    <li><a href="#">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>公司</h4>
+                <ul>
+                    <li><a href="#">关于</a></li>
+                    <li><a href="#">博客</a></li>
+                    <li><a href="#">职业</a></li>
+                    <li><a href="#">媒体</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <div class="logo">
+                <a href="#">&copy; 2024 GitHub, Inc.</a>
+            </div>
+            <div>
+                <a href="#">条款</a>
+                <a href="#">隐私</a>
+                <a href="#">安全</a>
+                <a href="#">状态</a>
+                <a href="#">Docs</a>
+            </div>
+            <div class="social-links">
+                <!-- Placeholder for social media icons, typically SVGs or font icons -->
+                <a href="#">😊</a>
+                <a href="#">🐦</a>
+                <a href="#">📺</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
